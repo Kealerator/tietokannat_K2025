@@ -1,13 +1,13 @@
--- MySQL dump 10.13  Distrib 8.2.0, for macos13 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.36, for Linux (x86_64)
 --
 -- Host: localhost    Database: Opintorekisteri
 -- ------------------------------------------------------
--- Server version	8.2.0
+-- Server version	8.0.42-0ubuntu0.24.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8mb4 */;
+/*!50503 SET NAMES utf8 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -61,7 +61,7 @@ CREATE TABLE `Opintojakso` (
   UNIQUE KEY `Koodi` (`Koodi`),
   UNIQUE KEY `Koodi_2` (`Koodi`),
   UNIQUE KEY `Koodi_3` (`Koodi`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -100,6 +100,39 @@ LOCK TABLES `Opiskelija` WRITE;
 INSERT INTO `Opiskelija` VALUES (1,'Matti','Mainio','TVT25SPL','Verstaskatu 1'),(2,'Kroisos','Pennonen','TVT25SPL','Penninkatu 6'),(3,'Aku','Ankka','TVT25SPL','Paratiisitie 31'),(4,'Hannu','Hanhi','TVT25SPL','Kevätkatu 42'),(5,'Mikko','Mallikas','TVT25SPL','Varastokatu 13'),(6,'Otso','Åkerman','TVT25SPL','Eerikinkatu 2B'),(7,'Iines','Ankka','TVT25SPL','Liisankatu 7'),(8,'Pelle','Peloton','TVT25SPL','Tehdaskatu 9');
 /*!40000 ALTER TABLE `Opiskelija` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Temporary view structure for view `Suoritus`
+--
+
+DROP TABLE IF EXISTS `Suoritus`;
+/*!50001 DROP VIEW IF EXISTS `Suoritus`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `Suoritus` AS SELECT 
+ 1 AS `Sukunimi`,
+ 1 AS `Etunimi`,
+ 1 AS `Nimi`,
+ 1 AS `Arvosana`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Final view structure for view `Suoritus`
+--
+
+/*!50001 DROP VIEW IF EXISTS `Suoritus`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`Matti`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `Suoritus` AS select `Opiskelija`.`Sukunimi` AS `Sukunimi`,`Opiskelija`.`Etunimi` AS `Etunimi`,`Opintojakso`.`Nimi` AS `Nimi`,`Arviointi`.`Arvosana` AS `Arvosana` from ((`Opiskelija` join `Arviointi` on((`Opiskelija`.`idOpiskelija` = `Arviointi`.`idOpiskelija`))) join `Opintojakso` on((`Opintojakso`.`idOpintojakso` = `Arviointi`.`idOpintojakso`))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -110,4 +143,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-05-30 14:45:34
+-- Dump completed on 2025-06-19 14:55:39
