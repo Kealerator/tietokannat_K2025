@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 8.0.36, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.42, for Linux (x86_64)
 --
 -- Host: localhost    Database: Kirjastotietokanta
 -- ------------------------------------------------------
@@ -16,19 +16,146 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Temporary view structure for view `KaikkiTeoksetJaNiidenTekijät`
+-- Table structure for table `Asiakas`
 --
 
-DROP TABLE IF EXISTS `KaikkiTeoksetJaNiidenTekijät`;
-/*!50001 DROP VIEW IF EXISTS `KaikkiTeoksetJaNiidenTekijät`*/;
-SET @saved_cs_client     = @@character_set_client;
+DROP TABLE IF EXISTS `Asiakas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-/*!50001 CREATE VIEW `KaikkiTeoksetJaNiidenTekijät` AS SELECT 
- 1 AS `Etunimi`,
- 1 AS `Sukunimi`,
- 1 AS `Nimi`,
- 1 AS `Julkaisuvuosi`*/;
-SET character_set_client = @saved_cs_client;
+CREATE TABLE `Asiakas` (
+  `idAsiakas` int NOT NULL AUTO_INCREMENT,
+  `Etunimi` varchar(45) DEFAULT NULL,
+  `Sukunimi` varchar(45) DEFAULT NULL,
+  `Osoite` varchar(90) DEFAULT NULL,
+  `Sähköposti` varchar(90) DEFAULT NULL,
+  `Korttinumero` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`idAsiakas`),
+  UNIQUE KEY `Korttinumero_UNIQUE` (`Korttinumero`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Asiakas`
+--
+
+LOCK TABLES `Asiakas` WRITE;
+/*!40000 ALTER TABLE `Asiakas` DISABLE KEYS */;
+/*!40000 ALTER TABLE `Asiakas` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `Hylly`
+--
+
+DROP TABLE IF EXISTS `Hylly`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `Hylly` (
+  `idHylly` int NOT NULL,
+  `idOsasto` int NOT NULL,
+  PRIMARY KEY (`idHylly`,`idOsasto`),
+  KEY `fk_Hylly_Osasto1_idx` (`idOsasto`),
+  CONSTRAINT `fk_Hylly_Osasto1` FOREIGN KEY (`idOsasto`) REFERENCES `Osasto` (`idOsasto`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Hylly`
+--
+
+LOCK TABLES `Hylly` WRITE;
+/*!40000 ALTER TABLE `Hylly` DISABLE KEYS */;
+INSERT INTO `Hylly` VALUES (4,1);
+/*!40000 ALTER TABLE `Hylly` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `Kirja`
+--
+
+DROP TABLE IF EXISTS `Kirja`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `Kirja` (
+  `idKirja` int NOT NULL AUTO_INCREMENT,
+  `idTeos` int NOT NULL,
+  `Laji` varchar(45) DEFAULT NULL,
+  `Kieli` varchar(45) DEFAULT NULL,
+  `Julkaisu` date DEFAULT NULL,
+  `Koodi` varchar(64) DEFAULT NULL,
+  `idOsasto` int NOT NULL,
+  `idHylly` int DEFAULT NULL,
+  PRIMARY KEY (`idKirja`),
+  KEY `fk_Kirja_Teos1_idx` (`idTeos`),
+  KEY `fk_Kirja_Hylly1_idx` (`idHylly`,`idOsasto`),
+  CONSTRAINT `fk_Kirja_Hylly1` FOREIGN KEY (`idHylly`, `idOsasto`) REFERENCES `Hylly` (`idHylly`, `idOsasto`),
+  CONSTRAINT `fk_Kirja_Teos1` FOREIGN KEY (`idTeos`) REFERENCES `Teos` (`idTeos`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Kirja`
+--
+
+LOCK TABLES `Kirja` WRITE;
+/*!40000 ALTER TABLE `Kirja` DISABLE KEYS */;
+INSERT INTO `Kirja` VALUES (1,2,'Fantasia','Englanti','2012-09-01','ISBN9780547928241',1,4),(2,3,'Fantasia','Englanti','1991-07-04','ISBN9780261102354',1,4);
+/*!40000 ALTER TABLE `Kirja` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `Lainaus`
+--
+
+DROP TABLE IF EXISTS `Lainaus`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `Lainaus` (
+  `idLainaus` int NOT NULL AUTO_INCREMENT,
+  `idAsiakas` int NOT NULL,
+  `idKirja` int NOT NULL,
+  `Alku pvm` date DEFAULT NULL,
+  `Loppu pvm` date DEFAULT NULL,
+  PRIMARY KEY (`idLainaus`),
+  KEY `fk_Lainaus_Kirja1_idx` (`idKirja`),
+  KEY `fk_Lainaus_Asiakas1_idx` (`idAsiakas`),
+  CONSTRAINT `fk_Lainaus_Asiakas1` FOREIGN KEY (`idAsiakas`) REFERENCES `Asiakas` (`idAsiakas`),
+  CONSTRAINT `fk_Lainaus_Kirja1` FOREIGN KEY (`idKirja`) REFERENCES `Kirja` (`idKirja`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Lainaus`
+--
+
+LOCK TABLES `Lainaus` WRITE;
+/*!40000 ALTER TABLE `Lainaus` DISABLE KEYS */;
+/*!40000 ALTER TABLE `Lainaus` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `Osasto`
+--
+
+DROP TABLE IF EXISTS `Osasto`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `Osasto` (
+  `idOsasto` int NOT NULL AUTO_INCREMENT,
+  `Nimi` varchar(45) NOT NULL,
+  PRIMARY KEY (`idOsasto`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Osasto`
+--
+
+LOCK TABLES `Osasto` WRITE;
+/*!40000 ALTER TABLE `Osasto` DISABLE KEYS */;
+INSERT INTO `Osasto` VALUES (1,'Alpha');
+/*!40000 ALTER TABLE `Osasto` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `Tekijä`
@@ -39,10 +166,9 @@ DROP TABLE IF EXISTS `Tekijä`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `Tekijä` (
   `idTekijä` int NOT NULL AUTO_INCREMENT,
-  `Etunimi` varchar(45) DEFAULT NULL,
-  `Sukunimi` varchar(45) DEFAULT NULL,
+  `Nimi` varchar(120) NOT NULL,
   PRIMARY KEY (`idTekijä`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -51,8 +177,36 @@ CREATE TABLE `Tekijä` (
 
 LOCK TABLES `Tekijä` WRITE;
 /*!40000 ALTER TABLE `Tekijä` DISABLE KEYS */;
-INSERT INTO `Tekijä` VALUES (1,'R.A.','Salvatore'),(2,'J.R.R.','Tolkien');
+INSERT INTO `Tekijä` VALUES (1,'J.R.R. Tolkien');
 /*!40000 ALTER TABLE `Tekijä` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `Tekijä_has_Teos`
+--
+
+DROP TABLE IF EXISTS `Tekijä_has_Teos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `Tekijä_has_Teos` (
+  `idTekijä` int NOT NULL,
+  `idTeos` int NOT NULL,
+  PRIMARY KEY (`idTekijä`,`idTeos`),
+  KEY `fk_Teos_has_Tekijä_Tekijä1_idx` (`idTekijä`),
+  KEY `fk_Teos_has_Tekijä_Teos_idx` (`idTeos`),
+  CONSTRAINT `fk_Teos_has_Tekijä_Tekijä1` FOREIGN KEY (`idTekijä`) REFERENCES `Tekijä` (`idTekijä`),
+  CONSTRAINT `fk_Teos_has_Tekijä_Teos` FOREIGN KEY (`idTeos`) REFERENCES `Teos` (`idTeos`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Tekijä_has_Teos`
+--
+
+LOCK TABLES `Tekijä_has_Teos` WRITE;
+/*!40000 ALTER TABLE `Tekijä_has_Teos` DISABLE KEYS */;
+INSERT INTO `Tekijä_has_Teos` VALUES (1,2),(1,3);
+/*!40000 ALTER TABLE `Tekijä_has_Teos` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -65,7 +219,7 @@ DROP TABLE IF EXISTS `Teos`;
 CREATE TABLE `Teos` (
   `idTeos` int NOT NULL AUTO_INCREMENT,
   `Nimi` varchar(90) NOT NULL,
-  `Julkaisuvuosi` year NOT NULL,
+  `Julkaisuvuosi` year DEFAULT NULL,
   PRIMARY KEY (`idTeos`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -76,54 +230,9 @@ CREATE TABLE `Teos` (
 
 LOCK TABLES `Teos` WRITE;
 /*!40000 ALTER TABLE `Teos` DISABLE KEYS */;
-INSERT INTO `Teos` VALUES (1,'The Dark Elf Trilogies: Homeland',1990),(2,'The Hobbit',1937),(3,'The Icewind Dale Trilogy: The Crystal Shard',1988);
+INSERT INTO `Teos` VALUES (2,'The Hobbit, or There and Back Again',1937),(3,'The Fellowship of The Ring',1954);
 /*!40000 ALTER TABLE `Teos` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `Teos_Tekijä`
---
-
-DROP TABLE IF EXISTS `Teos_Tekijä`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Teos_Tekijä` (
-  `idTeos` int NOT NULL,
-  `idTekijä` int NOT NULL,
-  KEY `fk_Teos_has_Tekijä_Tekijä1_idx` (`idTekijä`),
-  KEY `fk_Teos_has_Tekijä_Teos_idx` (`idTeos`),
-  CONSTRAINT `fk_Teos_has_Tekijä_Tekijä1` FOREIGN KEY (`idTekijä`) REFERENCES `Tekijä` (`idTekijä`),
-  CONSTRAINT `fk_Teos_has_Tekijä_Teos` FOREIGN KEY (`idTeos`) REFERENCES `Teos` (`idTeos`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `Teos_Tekijä`
---
-
-LOCK TABLES `Teos_Tekijä` WRITE;
-/*!40000 ALTER TABLE `Teos_Tekijä` DISABLE KEYS */;
-INSERT INTO `Teos_Tekijä` VALUES (1,1),(2,2),(3,1);
-/*!40000 ALTER TABLE `Teos_Tekijä` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Final view structure for view `KaikkiTeoksetJaNiidenTekijät`
---
-
-/*!50001 DROP VIEW IF EXISTS `KaikkiTeoksetJaNiidenTekijät`*/;
-/*!50001 SET @saved_cs_client          = @@character_set_client */;
-/*!50001 SET @saved_cs_results         = @@character_set_results */;
-/*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8mb4 */;
-/*!50001 SET character_set_results     = utf8mb4 */;
-/*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
-/*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`Matti`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `KaikkiTeoksetJaNiidenTekijät` AS select `Tekijä`.`Etunimi` AS `Etunimi`,`Tekijä`.`Sukunimi` AS `Sukunimi`,`te`.`Nimi` AS `Nimi`,`te`.`Julkaisuvuosi` AS `Julkaisuvuosi` from ((`Tekijä` join `Teos_Tekijä` `te_te` on((`Tekijä`.`idTekijä` = `te_te`.`idTekijä`))) join `Teos` `te` on((`te_te`.`idTeos` = `te`.`idTeos`))) */;
-/*!50001 SET character_set_client      = @saved_cs_client */;
-/*!50001 SET character_set_results     = @saved_cs_results */;
-/*!50001 SET collation_connection      = @saved_col_connection */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -134,4 +243,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-06-18 14:16:23
+-- Dump completed on 2025-06-24 15:26:36
