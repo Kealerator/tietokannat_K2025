@@ -65,9 +65,26 @@ CREATE TABLE `Hylly` (
 
 LOCK TABLES `Hylly` WRITE;
 /*!40000 ALTER TABLE `Hylly` DISABLE KEYS */;
-INSERT INTO `Hylly` VALUES (4,1);
+INSERT INTO `Hylly` VALUES (4,1),(13,1);
 /*!40000 ALTER TABLE `Hylly` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Temporary view structure for view `KaikkiKirjat`
+--
+
+DROP TABLE IF EXISTS `KaikkiKirjat`;
+/*!50001 DROP VIEW IF EXISTS `KaikkiKirjat`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `KaikkiKirjat` AS SELECT 
+ 1 AS `Tekijä`,
+ 1 AS `Nimi`,
+ 1 AS `Laji`,
+ 1 AS `Kieli`,
+ 1 AS `Hylly nro`,
+ 1 AS `Osasto`*/;
+SET character_set_client = @saved_cs_client;
 
 --
 -- Table structure for table `Kirja`
@@ -90,7 +107,7 @@ CREATE TABLE `Kirja` (
   KEY `fk_Kirja_Hylly1_idx` (`idHylly`,`idOsasto`),
   CONSTRAINT `fk_Kirja_Hylly1` FOREIGN KEY (`idHylly`, `idOsasto`) REFERENCES `Hylly` (`idHylly`, `idOsasto`),
   CONSTRAINT `fk_Kirja_Teos1` FOREIGN KEY (`idTeos`) REFERENCES `Teos` (`idTeos`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -99,7 +116,7 @@ CREATE TABLE `Kirja` (
 
 LOCK TABLES `Kirja` WRITE;
 /*!40000 ALTER TABLE `Kirja` DISABLE KEYS */;
-INSERT INTO `Kirja` VALUES (1,2,'Fantasia','Englanti','2012-09-01','ISBN9780547928241',1,4),(2,3,'Fantasia','Englanti','1991-07-04','ISBN9780261102354',1,4);
+INSERT INTO `Kirja` VALUES (1,2,'Fantasia','Englanti','2012-09-01','ISBN9780547928241',1,4),(2,3,'Fantasia','Englanti','1991-07-04','ISBN9780261102354',1,4),(4,4,'Lasten & Nuorten kaunokirjallisuus','Suomi','2024-08-09','ISBN9789522563477',1,13);
 /*!40000 ALTER TABLE `Kirja` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -168,7 +185,7 @@ CREATE TABLE `Tekijä` (
   `idTekijä` int NOT NULL AUTO_INCREMENT,
   `Nimi` varchar(120) NOT NULL,
   PRIMARY KEY (`idTekijä`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -177,7 +194,7 @@ CREATE TABLE `Tekijä` (
 
 LOCK TABLES `Tekijä` WRITE;
 /*!40000 ALTER TABLE `Tekijä` DISABLE KEYS */;
-INSERT INTO `Tekijä` VALUES (1,'J.R.R. Tolkien');
+INSERT INTO `Tekijä` VALUES (1,'J.R.R. Tolkien'),(2,'Sarah Courtauld'),(3,'Rosie Dickins');
 /*!40000 ALTER TABLE `Tekijä` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -191,7 +208,6 @@ DROP TABLE IF EXISTS `Tekijä_has_Teos`;
 CREATE TABLE `Tekijä_has_Teos` (
   `idTekijä` int NOT NULL,
   `idTeos` int NOT NULL,
-  PRIMARY KEY (`idTekijä`,`idTeos`),
   KEY `fk_Teos_has_Tekijä_Tekijä1_idx` (`idTekijä`),
   KEY `fk_Teos_has_Tekijä_Teos_idx` (`idTeos`),
   CONSTRAINT `fk_Teos_has_Tekijä_Tekijä1` FOREIGN KEY (`idTekijä`) REFERENCES `Tekijä` (`idTekijä`),
@@ -205,7 +221,7 @@ CREATE TABLE `Tekijä_has_Teos` (
 
 LOCK TABLES `Tekijä_has_Teos` WRITE;
 /*!40000 ALTER TABLE `Tekijä_has_Teos` DISABLE KEYS */;
-INSERT INTO `Tekijä_has_Teos` VALUES (1,2),(1,3);
+INSERT INTO `Tekijä_has_Teos` VALUES (1,2),(1,3),(2,4),(3,4);
 /*!40000 ALTER TABLE `Tekijä_has_Teos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -221,7 +237,7 @@ CREATE TABLE `Teos` (
   `Nimi` varchar(90) NOT NULL,
   `Julkaisuvuosi` year DEFAULT NULL,
   PRIMARY KEY (`idTeos`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -230,9 +246,27 @@ CREATE TABLE `Teos` (
 
 LOCK TABLES `Teos` WRITE;
 /*!40000 ALTER TABLE `Teos` DISABLE KEYS */;
-INSERT INTO `Teos` VALUES (2,'The Hobbit, or There and Back Again',1937),(3,'The Fellowship of The Ring',1954);
+INSERT INTO `Teos` VALUES (2,'The Hobbit, or There and Back Again',1937),(3,'The Fellowship of The Ring',1954),(4,'Lasten toivesatukirja',2024);
 /*!40000 ALTER TABLE `Teos` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Final view structure for view `KaikkiKirjat`
+--
+
+/*!50001 DROP VIEW IF EXISTS `KaikkiKirjat`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`Matti`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `KaikkiKirjat` AS select `tek`.`Nimi` AS `Tekijä`,`t`.`Nimi` AS `Nimi`,`k`.`Laji` AS `Laji`,`k`.`Kieli` AS `Kieli`,`h`.`idHylly` AS `Hylly nro`,`o`.`Nimi` AS `Osasto` from (((((`Tekijä` `tek` join `Tekijä_has_Teos` `tht` on((`tek`.`idTekijä` = `tht`.`idTekijä`))) join `Kirja` `k` on((`tht`.`idTeos` = `k`.`idTeos`))) join `Teos` `t` on((`k`.`idTeos` = `t`.`idTeos`))) join `Hylly` `h` on((`k`.`idHylly` = `h`.`idHylly`))) join `Osasto` `o` on((`h`.`idOsasto` = `o`.`idOsasto`))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -243,4 +277,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-06-24 15:26:36
+-- Dump completed on 2025-06-24 22:47:01
