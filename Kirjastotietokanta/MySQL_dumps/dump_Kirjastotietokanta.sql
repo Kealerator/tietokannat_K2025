@@ -31,7 +31,7 @@ CREATE TABLE `Asiakas` (
   `Korttinumero` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`idAsiakas`),
   UNIQUE KEY `Korttinumero_UNIQUE` (`Korttinumero`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,6 +40,7 @@ CREATE TABLE `Asiakas` (
 
 LOCK TABLES `Asiakas` WRITE;
 /*!40000 ALTER TABLE `Asiakas` DISABLE KEYS */;
+INSERT INTO `Asiakas` VALUES (1,'Roope','Ankka','Rahasäiliö','lantti.roope@luukku.fi','00014756');
 /*!40000 ALTER TABLE `Asiakas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -78,6 +79,7 @@ DROP TABLE IF EXISTS `KaikkiKirjat`;
 SET @saved_cs_client     = @@character_set_client;
 /*!50503 SET character_set_client = utf8mb4 */;
 /*!50001 CREATE VIEW `KaikkiKirjat` AS SELECT 
+ 1 AS `idTeos`,
  1 AS `Tekijä`,
  1 AS `Nimi`,
  1 AS `Laji`,
@@ -138,7 +140,7 @@ CREATE TABLE `Lainaus` (
   KEY `fk_Lainaus_Asiakas1_idx` (`idAsiakas`),
   CONSTRAINT `fk_Lainaus_Asiakas1` FOREIGN KEY (`idAsiakas`) REFERENCES `Asiakas` (`idAsiakas`),
   CONSTRAINT `fk_Lainaus_Kirja1` FOREIGN KEY (`idKirja`) REFERENCES `Kirja` (`idKirja`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -147,6 +149,7 @@ CREATE TABLE `Lainaus` (
 
 LOCK TABLES `Lainaus` WRITE;
 /*!40000 ALTER TABLE `Lainaus` DISABLE KEYS */;
+INSERT INTO `Lainaus` VALUES (1,1,1,'2025-06-26','2025-07-26');
 /*!40000 ALTER TABLE `Lainaus` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -263,7 +266,7 @@ UNLOCK TABLES;
 /*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`Matti`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `KaikkiKirjat` AS select `tek`.`Nimi` AS `Tekijä`,`t`.`Nimi` AS `Nimi`,`k`.`Laji` AS `Laji`,`k`.`Kieli` AS `Kieli`,`h`.`idHylly` AS `Hylly nro`,`o`.`Nimi` AS `Osasto` from (((((`Tekijä` `tek` join `Tekijä_has_Teos` `tht` on((`tek`.`idTekijä` = `tht`.`idTekijä`))) join `Kirja` `k` on((`tht`.`idTeos` = `k`.`idTeos`))) join `Teos` `t` on((`k`.`idTeos` = `t`.`idTeos`))) join `Hylly` `h` on((`k`.`idHylly` = `h`.`idHylly`))) join `Osasto` `o` on((`h`.`idOsasto` = `o`.`idOsasto`))) */;
+/*!50001 VIEW `KaikkiKirjat` AS select `t`.`idTeos` AS `idTeos`,`tek`.`Nimi` AS `Tekijä`,`t`.`Nimi` AS `Nimi`,`k`.`Laji` AS `Laji`,`k`.`Kieli` AS `Kieli`,`h`.`idHylly` AS `Hylly nro`,`o`.`Nimi` AS `Osasto` from (((((`Tekijä` `tek` join `Tekijä_has_Teos` `tht` on((`tek`.`idTekijä` = `tht`.`idTekijä`))) join `Kirja` `k` on((`tht`.`idTeos` = `k`.`idTeos`))) join `Teos` `t` on((`k`.`idTeos` = `t`.`idTeos`))) join `Hylly` `h` on((`k`.`idHylly` = `h`.`idHylly`))) join `Osasto` `o` on((`h`.`idOsasto` = `o`.`idOsasto`))) */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -277,4 +280,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-06-25 20:57:28
+-- Dump completed on 2025-06-26 11:19:40
