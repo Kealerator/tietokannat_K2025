@@ -1,13 +1,13 @@
--- MySQL dump 10.13  Distrib 8.0.42, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 8.2.0, for macos13 (x86_64)
 --
--- Host: localhost    Database: Kirjastotietokanta
+-- Host: localhost    Database: Opintorekisteri
 -- ------------------------------------------------------
--- Server version	8.0.42-0ubuntu0.24.04.1
+-- Server version	8.2.0
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -16,83 +16,89 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Dumping data for table `Asiakas`
+-- Table structure for table `Arviointi`
 --
 
-LOCK TABLES `Asiakas` WRITE;
-/*!40000 ALTER TABLE `Asiakas` DISABLE KEYS */;
-INSERT INTO `Asiakas` VALUES (1,'Roope','Ankka','Rahasäiliö','lantti.roope@luukku.fi','00014756'),(2,'Aku','Ankka','Paratiisitie 13','a.ankka@outlook.com','00058754'),(3,'Mikki','Hiiri','Hiirentie 625','hiir.mik@icloud.com','00015975');
-/*!40000 ALTER TABLE `Asiakas` ENABLE KEYS */;
+DROP TABLE IF EXISTS `Arviointi`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `Arviointi` (
+  `idOpiskelija` int NOT NULL,
+  `idOpintojakso` int NOT NULL,
+  `Arvosana` tinyint DEFAULT NULL,
+  `Päiväys` date DEFAULT NULL,
+  UNIQUE KEY `idOpiskelija` (`idOpiskelija`,`idOpintojakso`),
+  KEY `fk_Opiskelija_has_Opintojakso_Opintojakso1_idx` (`idOpintojakso`),
+  KEY `fk_Opiskelija_has_Opintojakso_Opiskelija_idx` (`idOpiskelija`),
+  CONSTRAINT `fk_Opiskelija_has_Opintojakso_Opintojakso1` FOREIGN KEY (`idOpintojakso`) REFERENCES `Opintojakso` (`idOpintojakso`),
+  CONSTRAINT `fk_Opiskelija_has_Opintojakso_Opiskelija` FOREIGN KEY (`idOpiskelija`) REFERENCES `Opiskelija` (`idOpiskelija`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Arviointi`
+--
+
+LOCK TABLES `Arviointi` WRITE;
+/*!40000 ALTER TABLE `Arviointi` DISABLE KEYS */;
+INSERT INTO `Arviointi` VALUES (1,1,1,'2025-05-29'),(1,2,3,'2025-05-29'),(1,3,4,'2025-05-29'),(1,4,5,'2025-05-29'),(2,1,5,'2025-04-01'),(2,2,3,'2025-01-27'),(2,3,2,'2025-05-29'),(3,1,1,'2025-05-01'),(3,2,2,'2025-05-01'),(5,1,1,'2025-05-29'),(5,4,5,'2025-05-29'),(6,1,5,'2025-05-29'),(7,1,5,'2025-03-14'),(7,2,4,'2025-05-30'),(8,1,4,'2025-05-30'),(8,2,5,'2025-05-30'),(8,3,5,'2025-05-30'),(8,4,5,'2025-05-30');
+/*!40000 ALTER TABLE `Arviointi` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Dumping data for table `Hylly`
+-- Table structure for table `Opintojakso`
 --
 
-LOCK TABLES `Hylly` WRITE;
-/*!40000 ALTER TABLE `Hylly` DISABLE KEYS */;
-INSERT INTO `Hylly` VALUES (4,1),(13,1);
-/*!40000 ALTER TABLE `Hylly` ENABLE KEYS */;
+DROP TABLE IF EXISTS `Opintojakso`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `Opintojakso` (
+  `idOpintojakso` int NOT NULL AUTO_INCREMENT,
+  `Nimi` varchar(45) DEFAULT NULL,
+  `Laajuus` tinyint DEFAULT NULL,
+  `Koodi` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`idOpintojakso`),
+  UNIQUE KEY `Koodi` (`Koodi`),
+  UNIQUE KEY `Koodi_2` (`Koodi`),
+  UNIQUE KEY `Koodi_3` (`Koodi`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Opintojakso`
+--
+
+LOCK TABLES `Opintojakso` WRITE;
+/*!40000 ALTER TABLE `Opintojakso` DISABLE KEYS */;
+INSERT INTO `Opintojakso` VALUES (1,'Alla Hejsan På Svenska!',5,'IN06969'),(2,'Matematiikan perusteet 1',10,'IN00686'),(3,'Matematiikan perusteet 2',10,'IN00687'),(4,'Sähkötyöturvallisuus 101',5,'IN00777');
+/*!40000 ALTER TABLE `Opintojakso` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Dumping data for table `Kirja`
+-- Table structure for table `Opiskelija`
 --
 
-LOCK TABLES `Kirja` WRITE;
-/*!40000 ALTER TABLE `Kirja` DISABLE KEYS */;
-INSERT INTO `Kirja` VALUES (1,2,'Fantasia','Englanti','2012-09-01','ISBN9780547928241',1,NULL),(2,3,'Fantasia','Englanti','1991-07-04','ISBN9780261102354',1,NULL),(4,4,'Lasten & Nuorten kaunokirjallisuus','Suomi','2024-08-09','ISBN9789522563477',1,NULL),(5,5,'Fantasia','Englanti','2007-04-01','ISBN9780261102361',1,4),(6,6,'Fantasia','Englanti','2007-04-01','ISBN9780261102378',1,4);
-/*!40000 ALTER TABLE `Kirja` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `Opiskelija`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `Opiskelija` (
+  `idOpiskelija` int NOT NULL AUTO_INCREMENT,
+  `Etunimi` varchar(45) DEFAULT NULL,
+  `Sukunimi` varchar(45) DEFAULT NULL,
+  `Luokkatunnus` varchar(45) DEFAULT NULL,
+  `Osoite` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`idOpiskelija`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `Lainaus`
+-- Dumping data for table `Opiskelija`
 --
 
-LOCK TABLES `Lainaus` WRITE;
-/*!40000 ALTER TABLE `Lainaus` DISABLE KEYS */;
-INSERT INTO `Lainaus` VALUES (2,2,2,'2025-01-01','2025-02-01'),(3,3,2,'2025-06-27','2025-07-27'),(4,3,4,'2025-06-29','2025-07-29');
-/*!40000 ALTER TABLE `Lainaus` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Dumping data for table `Osasto`
---
-
-LOCK TABLES `Osasto` WRITE;
-/*!40000 ALTER TABLE `Osasto` DISABLE KEYS */;
-INSERT INTO `Osasto` VALUES (1,'Alpha');
-/*!40000 ALTER TABLE `Osasto` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Dumping data for table `Tekijä`
---
-
-LOCK TABLES `Tekijä` WRITE;
-/*!40000 ALTER TABLE `Tekijä` DISABLE KEYS */;
-INSERT INTO `Tekijä` VALUES (1,'J.R.R. Tolkien'),(2,'Sarah Courtauld'),(3,'Rosie Dickins');
-/*!40000 ALTER TABLE `Tekijä` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Dumping data for table `Tekijä_has_Teos`
---
-
-LOCK TABLES `Tekijä_has_Teos` WRITE;
-/*!40000 ALTER TABLE `Tekijä_has_Teos` DISABLE KEYS */;
-INSERT INTO `Tekijä_has_Teos` VALUES (1,2),(1,3),(2,4),(3,4),(1,5),(1,6);
-/*!40000 ALTER TABLE `Tekijä_has_Teos` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Dumping data for table `Teos`
---
-
-LOCK TABLES `Teos` WRITE;
-/*!40000 ALTER TABLE `Teos` DISABLE KEYS */;
-INSERT INTO `Teos` VALUES (2,'The Hobbit, or There and Back Again',1937),(3,'The Fellowship of The Ring',1954),(4,'Lasten toivesatukirja',2024),(5,'The Two Towers',1954),(6,'The Return of The King',1955);
-/*!40000 ALTER TABLE `Teos` ENABLE KEYS */;
+LOCK TABLES `Opiskelija` WRITE;
+/*!40000 ALTER TABLE `Opiskelija` DISABLE KEYS */;
+INSERT INTO `Opiskelija` VALUES (1,'Matti','Mainio','TVT25SPL','Verstaskatu 1'),(2,'Kroisos','Pennonen','TVT25SPL','Penninkatu 6'),(3,'Aku','Ankka','TVT25SPL','Paratiisitie 31'),(4,'Hannu','Hanhi','TVT25SPL','Kevätkatu 42'),(5,'Mikko','Mallikas','TVT25SPL','Varastokatu 13'),(6,'Otso','Åkerman','TVT25SPL','Eerikinkatu 2B'),(7,'Iines','Ankka','TVT25SPL','Liisankatu 7'),(8,'Pelle','Peloton','TVT25SPL','Tehdaskatu 9');
+/*!40000 ALTER TABLE `Opiskelija` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -104,4 +110,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-06-29  1:09:14
+-- Dump completed on 2025-05-30 14:45:34
