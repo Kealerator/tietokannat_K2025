@@ -1,13 +1,13 @@
--- MySQL dump 10.13  Distrib 8.2.0, for macos13 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.42, for Linux (x86_64)
 --
 -- Host: localhost    Database: Opintorekisteri
 -- ------------------------------------------------------
--- Server version	8.2.0
+-- Server version	8.0.42-0ubuntu0.24.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8mb4 */;
+/*!50503 SET NAMES utf8 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -16,53 +16,14 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `Arviointi`
---
-
-DROP TABLE IF EXISTS `Arviointi`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Arviointi` (
-  `idOpiskelija` int NOT NULL,
-  `idOpintojakso` int NOT NULL,
-  `Arvosana` tinyint DEFAULT NULL,
-  `Päiväys` date DEFAULT NULL,
-  UNIQUE KEY `idOpiskelija` (`idOpiskelija`,`idOpintojakso`),
-  KEY `fk_Opiskelija_has_Opintojakso_Opintojakso1_idx` (`idOpintojakso`),
-  KEY `fk_Opiskelija_has_Opintojakso_Opiskelija_idx` (`idOpiskelija`),
-  CONSTRAINT `fk_Opiskelija_has_Opintojakso_Opintojakso1` FOREIGN KEY (`idOpintojakso`) REFERENCES `Opintojakso` (`idOpintojakso`),
-  CONSTRAINT `fk_Opiskelija_has_Opintojakso_Opiskelija` FOREIGN KEY (`idOpiskelija`) REFERENCES `Opiskelija` (`idOpiskelija`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Dumping data for table `Arviointi`
 --
 
 LOCK TABLES `Arviointi` WRITE;
 /*!40000 ALTER TABLE `Arviointi` DISABLE KEYS */;
-INSERT INTO `Arviointi` VALUES (1,1,1,'2025-05-29'),(1,2,3,'2025-05-29'),(1,3,4,'2025-05-29'),(1,4,5,'2025-05-29'),(2,1,5,'2025-04-01'),(2,2,3,'2025-01-27'),(2,3,2,'2025-05-29'),(3,1,1,'2025-05-01'),(3,2,2,'2025-05-01'),(5,1,1,'2025-05-29'),(5,4,5,'2025-05-29'),(6,1,5,'2025-05-29'),(7,1,5,'2025-03-14'),(7,2,4,'2025-05-30'),(8,1,4,'2025-05-30'),(8,2,5,'2025-05-30'),(8,3,5,'2025-05-30'),(8,4,5,'2025-05-30');
+INSERT INTO `Arviointi` VALUES (1,1,1,'2025-05-29'),(1,2,3,'2025-05-29'),(1,3,4,'2025-05-29'),(1,4,5,'2025-05-29'),(2,1,5,'2025-04-01'),(2,2,3,'2025-01-27'),(2,3,2,'2025-05-29'),(3,1,1,'2025-05-01'),(3,2,2,'2025-05-01'),(5,1,1,'2025-05-29'),(5,4,5,'2025-05-29'),(6,1,5,'2025-05-29'),(6,2,3,'2025-06-29'),(7,1,5,'2025-03-14'),(7,2,4,'2025-05-30'),(8,1,4,'2025-05-30'),(8,2,5,'2025-05-30'),(8,3,5,'2025-05-30'),(8,4,5,'2025-05-30');
 /*!40000 ALTER TABLE `Arviointi` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `Opintojakso`
---
-
-DROP TABLE IF EXISTS `Opintojakso`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Opintojakso` (
-  `idOpintojakso` int NOT NULL AUTO_INCREMENT,
-  `Nimi` varchar(45) DEFAULT NULL,
-  `Laajuus` tinyint DEFAULT NULL,
-  `Koodi` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`idOpintojakso`),
-  UNIQUE KEY `Koodi` (`Koodi`),
-  UNIQUE KEY `Koodi_2` (`Koodi`),
-  UNIQUE KEY `Koodi_3` (`Koodi`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `Opintojakso`
@@ -73,23 +34,6 @@ LOCK TABLES `Opintojakso` WRITE;
 INSERT INTO `Opintojakso` VALUES (1,'Alla Hejsan På Svenska!',5,'IN06969'),(2,'Matematiikan perusteet 1',10,'IN00686'),(3,'Matematiikan perusteet 2',10,'IN00687'),(4,'Sähkötyöturvallisuus 101',5,'IN00777');
 /*!40000 ALTER TABLE `Opintojakso` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `Opiskelija`
---
-
-DROP TABLE IF EXISTS `Opiskelija`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Opiskelija` (
-  `idOpiskelija` int NOT NULL AUTO_INCREMENT,
-  `Etunimi` varchar(45) DEFAULT NULL,
-  `Sukunimi` varchar(45) DEFAULT NULL,
-  `Luokkatunnus` varchar(45) DEFAULT NULL,
-  `Osoite` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`idOpiskelija`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `Opiskelija`
@@ -110,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-05-30 14:45:34
+-- Dump completed on 2025-06-29 17:07:22
