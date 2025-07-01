@@ -8,6 +8,16 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
+app.get('/example',
+  function(request, response) {
+    response.send('I am example from app.js!');
+    console.log('I am example from app.js!');
+
+  }
+
+);
+
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
