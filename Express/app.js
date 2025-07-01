@@ -14,6 +14,14 @@ app.get('/example',
     console.log('I am example from app.js!');
 
   }
+);
+
+
+app.get('/example/:name',
+
+  function(request, response) {
+    response.send('Hello ' + request.params.name);
+  }
 
 );
 
